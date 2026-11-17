@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DecisorPro — Matriz Ponderada de Decisiones Multicriterio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="brand-logo" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 21.5 8.9 17.9 20.1 6.1 20.1 2.5 8.9 12 2"></polygon>
+          <polygon points="12 6.5 17.2 10.3 15.2 16.5 8.8 16.5 6.8 10.3 12 6.5"></polygon>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+        </svg>
+      </div>
+      <div>
+        <h1>DecisorPro</h1>
+        <p class="subtitle">Matriz Ponderada de Decisiones Multicriterio (MCDA) &amp; Radar Visual</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="decision-title-group">
+        <label for="decision-title-input" class="sr-only">Título de la decisión</label>
+        <input
+          type="text"
+          id="decision-title-input"
+          class="decision-title-input"
+          placeholder="Nombre de la decisión..."
+          maxlength="80"
+          aria-label="Título de la decisión"
+        />
+      </div>
+      <button type="button" id="btn-load-demo" class="btn btn-secondary" title="Cargar ejemplo de 3 laptops y 5 criterios">
+        Cargar Decisión Demo
+      </button>
+      <button type="button" id="btn-export-json" class="btn btn-outline" title="Descargar matriz en formato JSON">
+        Exportar JSON
+      </button>
+      <button type="button" id="btn-export-csv" class="btn btn-outline" title="Descargar matriz en formato CSV">
+        Exportar CSV
+      </button>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    <!-- Panel Superior: Matriz de Evaluación -->
+    <section class="card matrix-section" aria-labelledby="matrix-heading">
+      <div class="card-header">
+        <div>
+          <h2 id="matrix-heading">1. Matriz de Evaluación y Ponderación</h2>
+          <p class="card-desc">
+            Define entre <strong>2 y 6 alternativas</strong> y entre <strong>3 y 8 criterios</strong>. Los pesos brutos (1–100) se normalizan automáticamente al 100%.
+          </p>
+        </div>
+        <div class="matrix-controls">
+          <span id="weight-summary-badge" class="badge badge-info" title="Suma de pesos brutos y normalización">
+            Suma bruta: 100 &rarr; Normalizado: 100.0%
+          </span>
+          <button type="button" id="btn-add-criterion" class="btn btn-primary btn-sm">
+            + Criterio
+          </button>
+          <button type="button" id="btn-add-alternative" class="btn btn-primary btn-sm">
+            + Alternativa
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="decision-matrix-table" class="matrix-table">
+          <thead id="matrix-thead"></thead>
+          <tbody id="matrix-tbody"></tbody>
+          <tfoot id="matrix-tfoot"></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Panel Inferior: Ranking, Sensibilidad y Gráfico de Radar -->
+    <div class="analytics-grid">
+      <!-- Columna Izquierda: Ranking y Análisis de Sensibilidad -->
+      <div class="analytics-left">
+        <section class="card ranking-section" aria-labelledby="ranking-heading">
+          <div class="card-header">
+            <div>
+              <h2 id="ranking-heading">2. Ranking Ponderado en Tiempo Real</h2>
+              <p class="card-desc">Puntaje total en escala 0.00 a 10.00 con desglose de aporte por criterio.</p>
+            </div>
+          </div>
+          <div id="ranking-container" class="ranking-list"></div>
+        </section>
+
+        <section class="card sensitivity-section" aria-labelledby="sensitivity-heading">
+          <div class="card-header">
+            <div>
+              <h2 id="sensitivity-heading">3. Análisis de Sensibilidad Automático (&plusmn;20%)</h2>
+              <p class="card-desc">
+                Evalúa si la opción ganadora cambia al variar &plusmn;20% el criterio con mayor peso y re-normalizar los demás.
+              </p>
+            </div>
+          </div>
+          <div id="sensitivity-container" class="sensitivity-content"></div>
+        </section>
+      </div>
+
+      <!-- Columna Derecha: Gráfico de Radar en Canvas Nativo -->
+      <section class="card radar-section" aria-labelledby="radar-heading">
+        <div class="card-header">
+          <div>
+            <h2 id="radar-heading">4. Perfil Comparativo (Gráfico de Radar)</h2>
+            <p class="card-desc">Superposición de desempeños por criterio (escala radial 2 a 10).</p>
+          </div>
+        </div>
+        <div id="radar-legend" class="radar-legend" role="group" aria-label="Leyenda de alternativas"></div>
+        <div class="canvas-container">
+          <canvas id="radar-canvas" width="560" height="460" aria-label="Gráfico de radar comparativo de alternativas">
+            Tu navegador no soporta el elemento HTML5 Canvas.
+          </canvas>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
